@@ -4,9 +4,12 @@ use std::result::Result;
 use std::fs::File;
 use std::path::Path;
 use std::io::Read;
+use std::net::Ipv4Addr;
 
 mod err;
 use err::BencodeError;
+mod kademlia;
+use kademlia::{NodeId, Node};
 
 
 #[derive(Debug)]
@@ -220,10 +223,17 @@ fn main() {
     println!("{:?}", BencodeObject::parse("li-12345e4:asdfe"));
 
     let path = Path::new("/Users/huipeng/Downloads/ubuntu-16.10-desktop-amd64.iso.torrent");
-     match file_to_bytes(path)
-         .map(|file_bytes| BencodeObject::parse(file_bytes)) {
+    match file_to_bytes(path)
+        .map(|file_bytes| BencodeObject::parse(file_bytes)) {
 
-         Ok(obj) => println!("{:?}", obj),
-         e => println!("{:?}", e)
-     };
+        Ok(obj) => println!("{:?}", obj),
+        e => println!("{:?}", e)
+    };
+
+    let node = Node {
+        id: NodeId {data: [1, 2, 3, 4, 5]},
+        ip_address: Ipv4Addr::new(127, 0, 0, 1),
+        port: 1234
+    };
+    println!("{:?}", node);
 }
